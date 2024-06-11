@@ -15,7 +15,7 @@ public class GitHubUserController : ControllerBase
         _context = context;
     }
 
-    [HttpGet("/{UserId}")]
+    [HttpGet("/User/{UserId}")]
     public async Task<IActionResult> GetUser(uint UserId)
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
@@ -25,7 +25,7 @@ public class GitHubUserController : ControllerBase
         return Ok(new { user.Id, user.IsBanned, user.ReportScore });
     }
 
-    [HttpPost("/Ban/{UserId}")]
+    [HttpPost("/User/Ban/{UserId}")]
     public async Task<IActionResult> BanUser(uint UserId)
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
@@ -45,7 +45,7 @@ public class GitHubUserController : ControllerBase
         return Ok(new { Message = "User has been banned." });
     }
     
-    [HttpDelete("/Ban/{UserId}")]
+    [HttpDelete("/User/Ban/{UserId}")]
     public async Task<IActionResult> UnbanUser(uint UserId)
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
