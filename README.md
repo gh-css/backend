@@ -28,7 +28,16 @@ dotnet run --launch-profile "http"
 ```
 Or just run the launch profile in your preferred IDE
 
-### Running Database Migrations
+## Database Migrations
+**Requirements:**
+- Dotnet Entity Framework
+
+Dotnet Entity Framework can be installed by running:
+```bash
+dotnet tool install --global dotnet-ef
+```
+
+### Running the Migration
 If you changed or added any database relevant files like `Data/GitHubUser.cs` you can create a new migration by running:
 ```bash
 dotnet ef migrations add ExampleMigrationName
