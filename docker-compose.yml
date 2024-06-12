@@ -12,6 +12,8 @@
       - "8080:8080"
       - "8081:8081"
     environment:
+      - JWT_ISSUER=${JWT_ISSUER}
+      - JWT_SECRET=${JWT_SECRET}
       - ConnectionStrings__DefaultConnection=server=ghcss-postgres;port=${DATABASE_HOST_PORT};username=${DATABASE_USER};password=${DATABASE_PASSWORD};port=${DATABASE_HOST_PORT}
   postgres:
     container_name: ghcss-postgres
