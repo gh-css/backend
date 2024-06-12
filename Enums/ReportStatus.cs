@@ -1,4 +1,4 @@
-﻿namespace backend.Data;
+﻿namespace backend.Enums;
 
 public enum ReportStatus
 {

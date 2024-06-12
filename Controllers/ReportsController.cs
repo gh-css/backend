@@ -1,4 +1,6 @@
 ﻿using backend.Data;
+using backend.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +17,7 @@ public class ReportsController : ControllerBase
         _context = context;
     }
 
+    [Authorize]
     [HttpGet("All/{UserId}")]
     public async Task<IActionResult> GetAllUserReports(uint UserId)
     {
@@ -31,6 +34,7 @@ public class ReportsController : ControllerBase
         return Ok(reports);
     }
 
+    [Authorize]
     [HttpPost("{UserId}")]
     public async Task<IActionResult> FileUserReport(uint UserId, [FromBody] ReportRequest request)
     {
@@ -65,6 +69,7 @@ public class ReportsController : ControllerBase
         return Ok(new { Message = "Report filed successfully" });
     }
 
+    [Authorize]
     [HttpPut("{ReportId}")]
     public async Task<IActionResult> AcceptReport(uint ReportId)
     {
@@ -95,7 +100,7 @@ public class ReportsController : ControllerBase
         return Ok(new { Message = "Report has been accepted and other pending reports removed" });
     }
 
-    
+    [Authorize]
     [HttpDelete("{ReportId}")]
     public async Task<IActionResult> RejectReport(uint ReportId)
     {

@@ -1,12 +1,13 @@
 ﻿services:
   backend:
     container_name: ghcss-backend
-    depends_on:
-      - postgres
+    restart: unless-stopped
     image: backend
     build:
       context: .
       dockerfile: Dockerfile
+    depends_on:
+      - postgres
     ports:
       - "8080:8080"
       - "8081:8081"
@@ -14,6 +15,7 @@
       - ConnectionStrings__DefaultConnection=server=ghcss-postgres;port=${DATABASE_HOST_PORT};username=${DATABASE_USER};password=${DATABASE_PASSWORD};port=${DATABASE_HOST_PORT}
   postgres:
     container_name: ghcss-postgres
+    restart: unless-stopped
     image: postgres:alpine3.20
     environment:
       - POSTGRES_USER=${DATABASE_USER}

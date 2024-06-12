@@ -1,4 +1,5 @@
 using backend.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ public class GitHubUserController : ControllerBase
         _context = context;
     }
 
+    [AllowAnonymous]
     [HttpGet("/User/{UserId}")]
     public async Task<IActionResult> GetUser(uint UserId)
     {
@@ -25,6 +27,7 @@ public class GitHubUserController : ControllerBase
         return Ok(new { user.Id, user.IsBanned, user.ReportScore });
     }
 
+    [Authorize]
     [HttpPost("/User/Ban/{UserId}")]
     public async Task<IActionResult> BanUser(uint UserId)
     {
@@ -45,6 +48,7 @@ public class GitHubUserController : ControllerBase
         return Ok(new { Message = "User has been banned." });
     }
     
+    [Authorize]
     [HttpDelete("/User/Ban/{UserId}")]
     public async Task<IActionResult> UnbanUser(uint UserId)
     {
