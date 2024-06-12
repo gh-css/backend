@@ -53,8 +53,9 @@ public class GitHubUserController : ControllerBase
         if (user == null) return NotFound(new { Message = "User not found" });
         
         user.IsBanned = false;
+        user.ReportScore = 0;
         await _context.SaveChangesAsync();
         
-        return Ok(new { Message = "User has been banned." });
+        return Ok(new { Message = "User has been unbanned." });
     }
 }

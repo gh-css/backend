@@ -42,7 +42,7 @@ public class ReportsController : ControllerBase
             {
                 Id = UserId,
                 IsBanned = false,
-                ReportScore = 1
+                ReportScore = 0
             };
 
             _context.GitHubUsers.Add(user);
@@ -57,6 +57,8 @@ public class ReportsController : ControllerBase
             GitHubUser = user
         };
         
+        user.ReportScore++;
+        
         _context.Reports.Add(report);
         await _context.SaveChangesAsync();
 
@@ -66,36 +68,61 @@ public class ReportsController : ControllerBase
     [HttpPut("{ReportId}")]
     public async Task<IActionResult> AcceptReport(uint ReportId)
     {
-        var report = await _context.Reports.Include(report => report.GitHubUser).FirstOrDefaultAsync(report => report.Id == ReportId);
+        var report = await _context.Reports.Include(r => r.GitHubUser).FirstOrDefaultAsync(r => r.Id == ReportId);
 
         if (report == null)
             return NotFound(new { Message = "Report not found" });
         if (report.Status != ReportStatus.Pending)
             return BadRequest(new { Message = "Report has already been processed" });
 
-        report.GitHubUser.IsBanned = true;
-        report.GitHubUser.ReportScore = 0;
-        report.Status = ReportStatus.Accepted;
-        
+        var userReports = await _context.Reports.Where(r => r.GitHubUserId == report.GitHubUserId && r.Status == ReportStatus.Pending).ToListAsync();
+
+        foreach (var r in userReports)
+        {
+            if (r.Id == ReportId)
+            {
+                r.Status = ReportStatus.Accepted;
+                report.GitHubUser.IsBanned = true;
+            }
+            else
+            {
+                r.Status = ReportStatus.Duplicate;
+            }
+        }
+    
         await _context.SaveChangesAsync();
 
-        return Ok(new { Message = "Report has been accepted" });
+        return Ok(new { Message = "Report has been accepted and other pending reports removed" });
     }
+
     
     [HttpDelete("{ReportId}")]
     public async Task<IActionResult> RejectReport(uint ReportId)
     {
-        var report = await _context.Reports.Include(report => report.GitHubUser).FirstOrDefaultAsync(report => report.Id == ReportId);
+        var report = await _context.Reports.Include(r => r.GitHubUser).FirstOrDefaultAsync(r => r.Id == ReportId);
         if (report == null)
             return NotFound(new { Message = "Report not found" });
         if (report.Status != ReportStatus.Pending)
             return BadRequest(new { Message = "Report has already been processed" });
 
+        var userReports = await _context.Reports.Where(r => r.GitHubUserId == report.GitHubUserId && r.Status == ReportStatus.Pending).ToListAsync();
+
+        foreach (var r in userReports)
+        {
+            if (r.Id == ReportId)
+            {
+                r.Status = ReportStatus.Rejected;
+            }
+            else
+            {
+                r.Status = ReportStatus.Duplicate;
+            }
+        }
+
         report.GitHubUser.ReportScore = 0;
-        report.Status = ReportStatus.Rejected;
-        
+
         await _context.SaveChangesAsync();
 
-        return Ok(new { Message = "Report has been rejected" });
+        return Ok(new { Message = "Report has been rejected and other pending reports removed" });
     }
 }
