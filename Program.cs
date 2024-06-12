@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 DotNetEnv.Env.NoClobber().Load();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 
 var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
                          ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
