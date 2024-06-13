@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/Api/[controller]")]
 public class GitHubUserController : ControllerBase
 {
     private readonly DatabaseContext _context;
@@ -17,7 +17,7 @@ public class GitHubUserController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpGet("/User/{UserId}")]
+    [HttpGet("{UserId}")]
     public async Task<IActionResult> GetUser(uint UserId)
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
@@ -28,7 +28,7 @@ public class GitHubUserController : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("/User/Ban/{UserId}")]
+    [HttpPost("Ban/{UserId}")]
     public async Task<IActionResult> BanUser(uint UserId)
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
@@ -49,7 +49,7 @@ public class GitHubUserController : ControllerBase
     }
     
     [Authorize]
-    [HttpDelete("/User/Ban/{UserId}")]
+    [HttpDelete("Ban/{UserId}")]
     public async Task<IActionResult> UnbanUser(uint UserId)
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
