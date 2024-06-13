@@ -9,8 +9,8 @@
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
-      - "8081:8081"
+      - "9620:8080"
+      - "9621:8081"
     environment:
       - JWT_ISSUER=${JWT_ISSUER}
       - JWT_KEY=${JWT_KEY}
