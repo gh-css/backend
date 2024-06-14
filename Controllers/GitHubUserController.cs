@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backend.Controllers;
 
 [ApiController]
-[Route("/Api/[controller]")]
+[Route("/Api/GitHub/User")]
 public class GitHubUserController : ControllerBase
 {
     private readonly DatabaseContext _context;
