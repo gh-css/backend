@@ -29,7 +29,7 @@ public class ReportsController : ControllerBase
         }).ToListAsync();
 
         if (reports.Count == 0)
-            return NotFound(new { Message = "No reports found for this user" });
+            return Ok(new { Message = "No reports found for this user" });
         
         return Ok(reports);
     }
@@ -76,7 +76,7 @@ public class ReportsController : ControllerBase
         var report = await _context.Reports.Include(r => r.GitHubUser).FirstOrDefaultAsync(r => r.Id == ReportId);
 
         if (report == null)
-            return NotFound(new { Message = "Report not found" });
+            return Ok(new { Message = "Report not found" });
         if (report.Status != ReportStatus.Pending)
             return BadRequest(new { Message = "Report has already been processed" });
 
@@ -106,7 +106,7 @@ public class ReportsController : ControllerBase
     {
         var report = await _context.Reports.Include(r => r.GitHubUser).FirstOrDefaultAsync(r => r.Id == ReportId);
         if (report == null)
-            return NotFound(new { Message = "Report not found" });
+            return Ok(new { Message = "Report not found" });
         if (report.Status != ReportStatus.Pending)
             return BadRequest(new { Message = "Report has already been processed" });
 
