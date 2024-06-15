@@ -22,7 +22,7 @@ public class GitHubUserController : ControllerBase
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
 
-        if (user == null) return NotFound(new { Message = "User not found" });
+        if (user == null) return Ok(new { Message = "User not found" });
 
         return Ok(new { user.Id, user.IsBanned, user.ReportScore });
     }
@@ -54,7 +54,7 @@ public class GitHubUserController : ControllerBase
     {
         var user = await _context.GitHubUsers.FirstOrDefaultAsync(user => user.Id == UserId);
         
-        if (user == null) return NotFound(new { Message = "User not found" });
+        if (user == null) return Ok(new { Message = "User not found" });
         
         user.IsBanned = false;
         user.ReportScore = 0;
